@@ -69,7 +69,7 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun digitNumber(n: Int): Int = when {
-    n < 10 -> 1
+    module(n) < 10 -> 1
     else -> digitNumber(n / 10) + digitNumber(n % 10)
 }
 
@@ -143,6 +143,7 @@ fun maxDivisor(n: Int): Int {
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
 fun isCoPrime(m: Int, n: Int): Boolean {
+    if (m == 1 || n == 1) return true
     if (m % 2 == 0 && n % 2 == 0) return false
     if (max(m, n) % min(m, n) == 0) return false
     for (i in 3..sqrt(min(m, n).toDouble()).toInt() step 2)
