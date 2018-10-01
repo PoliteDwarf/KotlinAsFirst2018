@@ -3,9 +3,7 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
-import kotlin.math.max
-import kotlin.math.pow
-import kotlin.math.sqrt
+import kotlin.math.*
 
 fun module(num: Int) = if (num > 0) num else num * -1
 
@@ -101,11 +99,17 @@ fun timeForHalfWay(t1: Double, v1: Double,
  */
 fun whichRookThreatens(kingX: Int, kingY: Int,
                        rookX1: Int, rookY1: Int,
-                       rookX2: Int, rookY2: Int): Int = when {
-    (kingX == rookX1 || kingY == rookY1) && (kingX == rookX2 || kingY == rookY2) -> 3
-    kingX == rookX1 || kingY == rookY1 -> 1
-    kingX == rookX2 || kingY == rookY2 -> 2
-    else -> 0
+                       rookX2: Int, rookY2: Int): Int {
+    val a = kingX == rookX1
+    val b = kingY == rookY1
+    val c = kingX == rookX2
+    val d = kingY == rookY2
+    return when {
+        (a || b) && (c || d) -> 3
+        a || b -> 1
+        c || d -> 2
+        else -> 0
+    }
 }
 
 /**
@@ -120,11 +124,16 @@ fun whichRookThreatens(kingX: Int, kingY: Int,
  */
 fun rookOrBishopThreatens(kingX: Int, kingY: Int,
                           rookX: Int, rookY: Int,
-                          bishopX: Int, bishopY: Int): Int = when {
-    (kingX == rookX || kingY == rookY) && module(kingX - bishopX) == module(kingY - bishopY) -> 3
-    (kingX == rookX) || (kingY == rookY) -> 1
-    module(kingX - bishopX) == module(kingY - bishopY) -> 2
-    else -> 0
+                          bishopX: Int, bishopY: Int): Int {
+    val a = kingX == rookX
+    val b = kingY == rookY
+    val c = abs(kingX - bishopX) == abs(kingY - bishopY)
+    return when {
+        (a || b) && c -> 3
+        a || b -> 1
+        c -> 2
+        else -> 0
+    }
 }
 
 /**
@@ -156,9 +165,6 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Если пересечения нет, вернуть -1.
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = when {
-    a > d || c > b -> -1
-    a >= c && b >= d -> d - a
-    a >= c && b < d -> b - a
-    c > a && d >= b -> b - c
-    else -> d - c
+    max(a, c) > min(b, d) -> -1
+    else -> min(b, d) - max(a, c)
 }

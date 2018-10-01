@@ -2,7 +2,6 @@
 package lesson3.task1
 
 import lesson1.task1.sqr
-import lesson2.task1.module
 import kotlin.math.*
 
 /**
@@ -69,8 +68,8 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun digitNumber(n: Int): Int = when {
-    module(n) < 10 -> 1
-    else -> digitNumber(n / 10) + digitNumber(n % 10)
+    abs(n) < 10 -> 1
+    else -> digitNumber(n / 10) + 1
 }
 
 /**
@@ -90,8 +89,6 @@ fun fib(n: Int): Int {
     }
     return num
 }
-/*        if (n <= 2) 1
-        else fib(n - 1) + fib(n - 2) */
 
 /**
  * Простая
@@ -100,15 +97,10 @@ fun fib(n: Int): Int {
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun lcm(m: Int, n: Int): Int {
-    var nod = 1
     if (max(m, n) % min(m, n) == 0) return max(m, n)
-    for (i in min(m, n) / 2 downTo 2) {
-        if (m % i == 0 && n % i == 0) {
-            nod = i
-            break
-        }
-    }
-    return m * n / nod
+    for (i in min(m, n) / 2 downTo 2)
+        if (m % i == 0 && n % i == 0) return m * n / i
+    return m * n
 }
 
 /**
@@ -277,25 +269,21 @@ fun hasDifferentDigits(n: Int): Boolean = when {
  */
 fun squareSequenceDigit(n: Int): Int {
     var i = 0
-    var ibegin = 0
-    var num: Int
-    var j = 0
+    var k = 0
+    var num: Long
+    var j: Long = 0
     while (i < n) {
         j++
         num = j * j
-        ibegin = i + 1
         while (num > 0) {
             i++
-            if (i == n) break
+            if (i == n) k = i
             num /= 10
         }
     }
-    num = revert(j * j)
-    for (dig in ibegin..i){
-        j = num % 10
-        num /= 10
-    }
-    return j
+    num = j * j
+    for (dig in k..i-1) num /= 10
+    return (num % 10).toInt()
 }
 
 /**
@@ -309,29 +297,23 @@ fun squareSequenceDigit(n: Int): Int {
  */
 fun fibSequenceDigit(n: Int): Int {
     var i = 2
-    var ibegin = 2
-    var num = 1
-    var snum = 1
-    var n1 = 1
-    var n2: Int
+    var k = 2
+    var num: Long = 1
+    var n1: Long = 1
+    var n2: Long = 0
     if (n == 1 || n == 2) return 1
     while (i < n) {
         n2 = n1
         n1 = num
         num = n1 + n2
-        ibegin = i + 1
-        snum = num
         while (num > 0) {
             i++
-            if (i == n) break
+            if (i == n) k = i
             num /= 10
         }
-        num = snum
+        num = n1 + n2
     }
-    num = revert(snum)
-    for (dig in ibegin..i){
-        snum = num % 10
-        num /= 10
-    }
-    return snum
+    num = n1 + n2
+    for (dig in k..i-1) num /= 10
+    return (num % 10).toInt()
 }
