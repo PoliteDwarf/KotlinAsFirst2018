@@ -150,11 +150,8 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  * то есть, существует ли такое целое k, что m <= k*k <= n.
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
-fun squareBetweenExists(m: Int, n: Int): Boolean {
-    for (i in sqrt(min(m, n).toDouble()).toInt()..sqrt(max(m, n).toDouble()).toInt())
-        if (sqr(i) >= min(m, n) && sqr(i) <= max(m, n)) return true
-    return false
-}
+fun squareBetweenExists(m: Int, n: Int): Boolean =
+        ceil(sqrt(min(m, n).toDouble())) <= floor(sqrt(max(m, n).toDouble()))
 
 /**
  * Средняя
@@ -189,9 +186,12 @@ fun sin(x: Double, eps: Double): Double {
     val newx = x % (2 * PI)
     var rez = newx
     var i = 3
-    while (newx.pow(i) / factorial(i) >= eps || -1 * newx.pow(i) / factorial(i) >= eps) {
-        rez -= newx.pow(i) / factorial(i) - newx.pow(i + 2) / factorial(i + 2)
-        i += 4
+    val k = -1.0
+    var j = 1
+    while (abs(newx.pow(i) / factorial(i)) >= eps) {
+        rez += newx.pow(i) / factorial(i) * k.pow(j)
+        j = (j + 1) % 2
+        i += 2
     }
     return rez
 }
@@ -207,9 +207,12 @@ fun cos(x: Double, eps: Double): Double {
     val newx = x % (2 * PI)
     var rez = 1.0
     var i = 2
-    while (newx.pow(i) / factorial(i) >= eps || -1 * newx.pow(i) / factorial(i) >= eps) {
-        rez -= newx.pow(i) / factorial(i) - newx.pow(i + 2) / factorial(i + 2)
-        i += 4
+    val k = -1.0
+    var j = 1
+    while (abs(newx.pow(i) / factorial(i)) >= eps) {
+        rez += newx.pow(i) / factorial(i) * k.pow(j)
+        j = (j + 1) % 2
+        i += 2
     }
     return rez
 }
@@ -251,11 +254,13 @@ fun isPalindrome(n: Int): Boolean = n == revert(n)
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun hasDifferentDigits(n: Int): Boolean = when {
-    n < 10 -> false
-    n < 100 -> n % 10 != n / 10 % 10
-    n % 10 == n / 10 % 10 -> hasDifferentDigits(n / 10)
-    else -> true
+fun hasDifferentDigits(n: Int): Boolean {
+    var num = n
+    if (num < 10) return false
+    while (num > 100)
+        if (num % 10 == num / 10 % 10) num /= 10
+        else return true
+    return num % 10 != num / 10
 }
 
 /**
@@ -282,7 +287,7 @@ fun squareSequenceDigit(n: Int): Int {
         }
     }
     num = j * j
-    for (dig in k..i-1) num /= 10
+    num /= (10.0.pow(i - k)).toLong()
     return (num % 10).toInt()
 }
 
@@ -314,6 +319,6 @@ fun fibSequenceDigit(n: Int): Int {
         num = n1 + n2
     }
     num = n1 + n2
-    for (dig in k..i-1) num /= 10
+    num /= (10.0.pow(i - k)).toLong()
     return (num % 10).toInt()
 }
