@@ -305,10 +305,9 @@ fun fibSequenceDigit(n: Int): Int {
     var k = 2
     var num: Long = 1
     var n1: Long = 1
-    var n2: Long = 0
     if (n == 1 || n == 2) return 1
     while (i < n) {
-        n2 = n1
+        val n2: Long = n1
         n1 = num
         num = n1 + n2
         while (num > 0) {
@@ -318,7 +317,6 @@ fun fibSequenceDigit(n: Int): Int {
         }
         num = n1 + n2
     }
-    num = n1 + n2
     num /= (10.0.pow(i - k)).toLong()
     return (num % 10).toInt()
 }
