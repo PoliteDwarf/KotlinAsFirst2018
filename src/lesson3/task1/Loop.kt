@@ -188,10 +188,14 @@ fun sin(x: Double, eps: Double): Double {
     var i = 3
     val k = -1.0
     var j = 1
-    while (abs(newx.pow(i) / factorial(i)) >= eps) {
-        rez += newx.pow(i) / factorial(i) * k.pow(j)
+    var dx = newx.pow(i)
+    var fac = factorial(i)
+    while (abs(dx / fac) >= eps) {
+        rez += dx / fac * k.pow(j)
         j = (j + 1) % 2
         i += 2
+        dx *= newx.pow(2)
+        fac *= i * (i - 1)
     }
     return rez
 }
@@ -209,10 +213,14 @@ fun cos(x: Double, eps: Double): Double {
     var i = 2
     val k = -1.0
     var j = 1
+    var dx = newx.pow(i)
+    var fac = factorial(i)
     while (abs(newx.pow(i) / factorial(i)) >= eps) {
         rez += newx.pow(i) / factorial(i) * k.pow(j)
         j = (j + 1) % 2
         i += 2
+        dx *= newx.pow(2)
+        fac *= i * (i - 1)
     }
     return rez
 }
