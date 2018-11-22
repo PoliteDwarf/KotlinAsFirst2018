@@ -3,8 +3,7 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
-import lesson1.task1.sqr
-import lesson3.task1.isPrime
+import kotlin.math.pow
 import kotlin.math.sqrt
 
 /**
@@ -180,7 +179,18 @@ fun accumulate(list: MutableList<Double>): MutableList<Double> = TODO()
  * Результат разложения вернуть в виде списка множителей, например 75 -> (3, 5, 5).
  * Множители в списке должны располагаться по возрастанию.
  */
-fun factorize(n: Int): List<Int> = TODO()
+fun factorize(n: Int): List<Int> {
+    val rez = mutableListOf<Int>()
+    var num = n
+    for (i in 2..sqrt(num.toDouble()).toInt()) {
+        while (num % i == 0) {
+            num /= i
+            rez.add(i)
+        }
+    }
+    if (num > 1) rez.add(num)
+    return rez
+}
 
 /**
  * Сложная
@@ -189,22 +199,7 @@ fun factorize(n: Int): List<Int> = TODO()
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
-fun factorizeToString(n: Int): String {
-    val rez = mutableListOf<Int>()
-    var num = n
-    while (num % 2 == 0) {
-        rez.add(2)
-        num /= 2
-    }
-    for (i in 3..sqrt(num.toDouble()).toInt() step 2) {
-        while (num % i == 0) {
-            num /= i
-            rez.add(i)
-        }
-    }
-    if (num > 1) rez.add(num)
-    return rez.joinToString(separator = "*")
-}
+fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*")
 
 /**
  * Средняя
@@ -223,7 +218,19 @@ fun convert(n: Int, base: Int): List<Int> = TODO()
  * строчными буквами: 10 -> a, 11 -> b, 12 -> c и так далее.
  * Например: n = 100, base = 4 -> 1210, n = 250, base = 14 -> 13c
  */
-fun convertToString(n: Int, base: Int): String = TODO()
+fun convertToString(n: Int, base: Int): String {
+    var list = listOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a",
+            "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u",
+            "v", "w", "x", "y", "z")
+    list = list.filter { list.indexOf(it) < base }
+    var rez = ""
+    var num = n
+    while (num > 0) {
+        rez += list[num % base]
+        num /= base
+    }
+    return rez.reversed()
+}
 
 /**
  * Средняя
@@ -232,7 +239,12 @@ fun convertToString(n: Int, base: Int): String = TODO()
  * из системы счисления с основанием base в десятичную.
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
-fun decimal(digits: List<Int>, base: Int): Int = TODO()
+fun decimal(digits: List<Int>, base: Int): Int {
+    val rez = mutableListOf<Int>()
+    for (i in 0 until digits.size)
+        rez.add((digits[i] * base.toDouble().pow(digits.size - i - 1)).toInt())
+    return rez.sum()
+}
 
 /**
  * Сложная
@@ -243,7 +255,15 @@ fun decimal(digits: List<Int>, base: Int): Int = TODO()
  * 10 -> a, 11 -> b, 12 -> c и так далее.
  * Например: str = "13c", base = 14 -> 250
  */
-fun decimalFromString(str: String, base: Int): Int = TODO()
+fun decimalFromString(str: String, base: Int): Int {
+    var list = listOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a",
+            "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u",
+            "v", "w", "x", "y", "z")
+    list = list.filter { list.indexOf(it) < base }
+    val rez = mutableListOf<Int>()
+    for (i in 0 until str.length) rez.add(list.indexOf(str[i].toString()))
+    return decimal(rez, base)
+}
 
 /**
  * Сложная
