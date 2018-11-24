@@ -225,10 +225,10 @@ fun convertToString(n: Int, base: Int): String {
     list = list.filter { list.indexOf(it) < base }
     var rez = ""
     var num = n
-    while (num > 0) {
+    do {
         rez += list[num % base]
         num /= base
-    }
+    } while (num > 0)
     return rez.reversed()
 }
 
