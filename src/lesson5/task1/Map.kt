@@ -94,7 +94,15 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *     mapOf("Emergency" to "911", "Police" to "02")
  *   ) -> mapOf("Emergency" to "112, 911", "Police" to "02")
  */
-fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> = TODO()
+fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
+    val rez = mapA.toMutableMap()
+    for ((key, value) in mapB) {
+        if (rez[key] != value && rez[key] != null) {
+            rez[key] = rez[key] + ", $value"
+        } else rez[key] = value
+    }
+    return rez
+}
 
 /**
  * Простая
@@ -106,7 +114,15 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *   buildGrades(mapOf("Марат" to 3, "Семён" to 5, "Михаил" to 5))
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
-fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = TODO()
+fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
+    val rez = mutableMapOf<Int, List<String>>()
+    for ((name, grade) in grades) {
+        if (rez[grade] != null) {
+            rez[grade] = rez[grade]!! + name
+        } else rez[grade] = listOf(name)
+    }
+    return rez
+}
 
 /**
  * Простая

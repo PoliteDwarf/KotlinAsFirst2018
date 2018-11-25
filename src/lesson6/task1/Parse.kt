@@ -2,6 +2,10 @@
 
 package lesson6.task1
 
+import lesson2.task2.daysInMonth
+import java.lang.Exception
+import java.lang.NumberFormatException
+
 /**
  * Пример
  *
@@ -49,12 +53,10 @@ fun main(args: Array<String>) {
         val seconds = timeStrToSeconds(line)
         if (seconds == -1) {
             println("Введённая строка $line не соответствует формату ЧЧ:ММ:СС")
-        }
-        else {
+        } else {
             println("Прошло секунд с начала суток: $seconds")
         }
-    }
-    else {
+    } else {
         println("Достигнут <конец файла> в процессе чтения строки. Программа прервана")
     }
 }
@@ -71,7 +73,22 @@ fun main(args: Array<String>) {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun dateStrToDigit(str: String): String = TODO()
+fun dateStrToDigit(str: String): String {
+    val months = mapOf<String, Int>("января" to 1, "февраля" to 2, "марта" to 3, "апреля" to 4,
+            "мая" to 5, "июня" to 6, "июля" to 7, "августа" to 8, "сентября" to 9, "октября" to 10,
+            "ноября" to 11, "декабря" to 12)
+    val parts = str.split(" ").toMutableList()
+    try {
+        parts[1] = months[parts[1]].toString()
+        val day = parts[0].toInt()
+        val month = parts[1].toInt()
+        val year = parts[2].toInt()
+        if (day > daysInMonth(month, year)) return ""
+        return String.format("%02d.%02d.%d", day, month, year)
+    } catch (e: Exception) {
+        return ""
+    }
+}
 
 /**
  * Средняя
@@ -121,7 +138,23 @@ fun bestLongJump(jumps: String): Int = TODO()
  * Прочитать строку и вернуть максимальную взятую высоту (230 в примере).
  * При нарушении формата входной строки вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int {
+    var maxrez = -1
+    var former = -1
+    val tries = jumps.split(" ")
+    for (tr in tries) {
+        try {
+            former = tr.toInt()
+        } catch (e: NumberFormatException) {
+            for (char in tr) {
+                if (char == '+') maxrez = former
+                else if ((char == '%') || (char == '-')) continue
+                else return -1
+            }
+        }
+    }
+    return maxrez
+}
 
 /**
  * Сложная
