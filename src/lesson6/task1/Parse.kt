@@ -3,7 +3,7 @@
 package lesson6.task1
 
 import lesson2.task2.daysInMonth
-import java.lang.Exception
+import java.lang.IndexOutOfBoundsException
 import java.lang.NumberFormatException
 
 /**
@@ -74,18 +74,20 @@ fun main(args: Array<String>) {
  * входными данными.
  */
 fun dateStrToDigit(str: String): String {
-    val months = mapOf<String, Int>("января" to 1, "февраля" to 2, "марта" to 3, "апреля" to 4,
-            "мая" to 5, "июня" to 6, "июля" to 7, "августа" to 8, "сентября" to 9, "октября" to 10,
-            "ноября" to 11, "декабря" to 12)
+    val months = mapOf<String, String>("января" to "1", "февраля" to "2", "марта" to "3", "апреля" to "4",
+            "мая" to "5", "июня" to "6", "июля" to "7", "августа" to "8", "сентября" to "9", "октября" to "10",
+            "ноября" to "11", "декабря" to "12")
     val parts = str.split(" ").toMutableList()
     try {
-        parts[1] = months[parts[1]].toString()
+        parts[1] = months[parts[1]] ?: ""
         val day = parts[0].toInt()
         val month = parts[1].toInt()
         val year = parts[2].toInt()
         if (day > daysInMonth(month, year)) return ""
         return String.format("%02d.%02d.%d", day, month, year)
-    } catch (e: Exception) {
+    } catch (e: NumberFormatException) {
+        return ""
+    } catch (e: IndexOutOfBoundsException) {
         return ""
     }
 }
@@ -144,13 +146,23 @@ fun bestHighJump(jumps: String): Int {
     val tries = jumps.split(" ")
     for (tr in tries) {
         try {
-            former = tr.toInt()
-        } catch (e: NumberFormatException) {
+            var flag = 0
             for (char in tr) {
-                if (char == '+') maxrez = former
-                else if ((char == '%') || (char == '-')) continue
-                else return -1
+                if (char == '+') {
+                    maxrez = former
+                    flag = 1
+                } else if ((char == '%') || (char == '-')) {
+                    flag = 1
+                } else {
+                    char.toInt()
+                    flag = 0
+                }
             }
+            if (flag == 0) {
+                former = tr.toInt()
+            }
+        } catch (e: NumberFormatException) {
+            return -1
         }
     }
     return maxrez
