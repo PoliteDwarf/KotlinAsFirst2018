@@ -60,7 +60,7 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
     for (sub in substrings) {
         rez[sub] = 0
         val newsub = sub.toLowerCase()
-        for (i in 0 until newfile.length) {
+        for (i in 0 until newfile.length - sub.length + 1) {
             if (newfile[i] == newsub[0]) {
                 var j = 1
                 while (j < sub.length) {
